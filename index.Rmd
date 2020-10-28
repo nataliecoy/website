@@ -5,8 +5,8 @@ date: "10/28/2020"
 output: html_document
 ---
 
-```{r setup, echo = FALSE, message=FALSE, warning=FALSE, results=FALSE, cache=TRUE}
-knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, results=FALSE, cache=TRUE)
+```{r setup, echo = FALSE, message=FALSE, warning=FALSE, results=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, results=FALSE, cache = TRUE)
 library(tmap)      #interactive maps, raster + vector layers
 library(raster)       #Main raster library
 library(tidyverse)    #our old friend
@@ -26,20 +26,43 @@ counties <- st_read("CA_Counties/CA_Counties_TIGER2016.shp")
 
 ```{r}
 ndvi_birmingham <- raster("../fong-coy/data/NDVI/composite_birmingham.tif")
-
 shp_birmingham <- 
   holc %>% 
   filter(city == "Birmingham")
 
 ndvi_baltimore <- raster("../fong-coy/data/NDVI/composite_baltimore.tif")
-
 shp_baltimore <- 
   holc %>% 
   filter(city == "Baltimore")
+
+ndvi_indianapolis <- raster("../fong-coy/data/NDVI/composite_indianapolis.tif")
+shp_indianapolis <- 
+  holc %>% 
+  filter(city == "Indianapolis")
+
+ndvi_los_angeles <- raster("../fong-coy/data/NDVI/composite_LA.tif")
+shp_LA <- 
+  holc %>% 
+  filter(city == "Los Angeles")
+
+ndvi_minneapolis <- raster("../fong-coy/data/NDVI/composite_minneapolis.tif")
+shp_mi <- 
+  holc %>% 
+  filter(city == "Minneapolis")
+
+ndvi_phoenix <- raster("../fong-coy/data/NDVI/composite_phoenix.tif")
+shp_ph <- 
+  holc %>% 
+  filter(city == "Phoenix")
+
+ndvi_san_francisco <- raster("../fong-coy/data/NDVI/composite_SF.tif")
+shp_sf <- 
+  holc %>% 
+  filter(city == "San Francisco")
 ```
 
 #Redlining throughout Birmingham, AL
-```{r results="markup"}
+```{r results="markup", cache=FALSE}
 tmap_mode("view")
 tm_shape(shp_birmingham) +
   tm_polygons("holc_grade", alpha = 0.3) +
@@ -49,7 +72,7 @@ tm_shape(shp_birmingham) +
 ```
 
 #Redlining in Baltimore, MD
-```{r}
+```{r results="markup", cache = FALSE}
 tmap_mode("view")
 tm_shape(shp_baltimore) +
   tm_polygons("holc_grade", alpha = 0.3) +
@@ -57,3 +80,47 @@ tm_shape(shp_baltimore) +
   tm_raster(alpha = 0.6, palette = terrain.colors(10))
 ```
 
+#Redlining in Indianapolis, IN
+```{r results="markup", cache=FALSE}
+tmap_mode("view")
+tm_shape(shp_indianapolis) +
+  tm_polygons("holc_grade", alpha = 0.3) +
+  tm_shape(ndvi_indianapolis) +
+  tm_raster(alpha = 0.6, palette = terrain.colors(10))
+```
+
+#Redlining in Los Angeles, CA
+```{r results="markup", cache= FALSE}
+tmap_mode("view")
+tm_shape(shp_LA) +
+  tm_polygons("holc_grade", alpha = 0.3) +
+  tm_shape(ndvi_los_angeles) +
+  tm_raster(alpha = 0.6, palette = terrain.colors(10))
+```
+
+#Redlining in Minneapolis, MN
+```{r results="markup", cache= FALSE}
+tmap_mode("view")
+tm_shape(shp_mi) +
+  tm_polygons("holc_grade", alpha = 0.3) +
+  tm_shape(ndvi_minneapolis) +
+  tm_raster(alpha = 0.6, palette = terrain.colors(10))
+```
+
+#Redlining in Phoenix, AZ
+```{r results="markup", cache= FALSE}
+tmap_mode("view")
+tm_shape(shp_ph) +
+  tm_polygons("holc_grade", alpha = 0.3) +
+  tm_shape(ndvi_phoenix) +
+  tm_raster(alpha = 0.6, palette = terrain.colors(10))
+```
+
+#Redlining in San Francisco, CA 
+```{r results="markup", cache= FALSE}
+tmap_mode("view")
+tm_shape(shp_sf) +
+  tm_polygons("holc_grade", alpha = 0.3) +
+  tm_shape(ndvi_san_francisco) +
+  tm_raster(alpha = 0.6, palette = terrain.colors(10))
+```
