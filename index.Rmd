@@ -1,0 +1,59 @@
+---
+title: "Redlining throughout Cities in the US"
+author: "Natalie Coy and Vicky Fong"
+date: "10/28/2020"
+output: html_document
+---
+
+```{r setup, echo = FALSE, message=FALSE, warning=FALSE, results=FALSE, cache=TRUE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, results=FALSE, cache=TRUE)
+library(tmap)      #interactive maps, raster + vector layers
+library(raster)       #Main raster library
+library(tidyverse)    #our old friend
+library(sf)           #to work with simple features data
+library(rgdal)
+```
+
+```{r}
+tmp <- tempfile()
+download.file("https://data.ca.gov/dataset/e212e397-1277-4df3-8c22-40721b095f33/resource/b0007416-a325-4777-9295-368ea6b710e6/download/ca-county-boundaries.zip", tmp) 
+unzip(tmp)
+
+holc <- st_read("../fong-coy/data/fullshpfile/shapefile/holc_ad_data.shp")
+
+counties <- st_read("CA_Counties/CA_Counties_TIGER2016.shp")
+```
+
+```{r}
+ndvi_birmingham <- raster("../fong-coy/data/NDVI/composite_birmingham.tif")
+
+shp_birmingham <- 
+  holc %>% 
+  filter(city == "Birmingham")
+
+ndvi_baltimore <- raster("../fong-coy/data/NDVI/composite_baltimore.tif")
+
+shp_baltimore <- 
+  holc %>% 
+  filter(city == "Baltimore")
+```
+
+#Redlining throughout Birmingham, AL
+```{r results="markup"}
+tmap_mode("view")
+tm_shape(shp_birmingham) +
+  tm_polygons("holc_grade", alpha = 0.3) +
+  tm_shape(ndvi_birmingham) +
+  tm_raster(alpha = 0.6, palette = terrain.colors(10))
+
+```
+
+#Redlining in Baltimore, MD
+```{r}
+tmap_mode("view")
+tm_shape(shp_baltimore) +
+  tm_polygons("holc_grade", alpha = 0.3) +
+  tm_shape(ndvi_baltimore) +
+  tm_raster(alpha = 0.6, palette = terrain.colors(10))
+```
+
